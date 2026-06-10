@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -13,6 +14,7 @@ model User {
   email     String    @unique
   password  String
   createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   listings  Listing[]
 
   @@map("users")
@@ -24,6 +26,7 @@ model Category {
   slug        String    @unique
   description String?
   createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   listings    Listing[]
 
   @@map("categories")
@@ -35,9 +38,9 @@ model Listing {
   title       String
   description String
   imageUrl    String?  @map("image_url")
-  price       Decimal
-  location    String
+  metadata    Json
   createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   createdBy   Int      @map("created_by")
 
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
