@@ -1,11 +1,11 @@
-// import express-validator
+//import express validator
 const { body } = require('express-validator');
 
-// import prisma
-const prisma = require('../../prisma/client');
+//import prisma
+const prisma = require('../../../prisma/client');
 
-//  definisikan validasi untuk create user
-const validateUser = [
+// Definisikan validasi untuk register
+const validateRegister = [
     body('name').notEmpty().withMessage('Name is required'),
     body('email')
         .notEmpty().withMessage('Email is required')
@@ -23,4 +23,11 @@ const validateUser = [
     body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
 ];
 
-module.exports = { validateUser };
+//definisikan validasi untuk login
+const validateLogin = [
+    body('email').notEmpty().withMessage('Email is required'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+];
+
+//export
+module.exports = { validateRegister, validateLogin };

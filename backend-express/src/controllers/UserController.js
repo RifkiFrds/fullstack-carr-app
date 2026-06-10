@@ -2,7 +2,7 @@
 const express = require("express");
 
 //import prisma client
-const prisma = require("../prisma/client");
+const prisma = require("../../prisma/client");
 
 // Import validationResult from express-validator
 const { validationResult } = require("express-validator");

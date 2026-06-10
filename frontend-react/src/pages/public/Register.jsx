@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
-import api from '../../services/api';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import api from '../../api/api'
 
-export default function Login() {
+export default function Register() {
     const navigate = useNavigate();
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [validation, setValidation] = useState([]);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e) => {
+    const register = async (e) => {
         e.preventDefault();
         setLoading(true);
 
-        await api.post('/api/login', {
+        await api.post('/api/register', {
+            name: name,
             email: email,
             password: password,
         })
-            .then((response) => {
-                localStorage.setItem('token', response.data.token);
-                navigate("/admin/dashboard");
+            .then(() => {
+                navigate("/login");
             })
             .catch(error => {
-                setValidation(error.response?.data?.errors || [{ msg: 'Login failed' }]);
+                setValidation(error.response?.data || { errors: [{ msg: 'Registration failed' }] });
                 setLoading(false);
             })
     };
@@ -33,29 +36,29 @@ export default function Login() {
         <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-                <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+                <div className="absolute top-0 right-0 w-96 h-96 bg-pink-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
             </div>
 
-            {/* Login Card */}
+            {/* Register Card */}
             <div className="relative w-full max-w-md z-10">
                 {/* Glass Card */}
                 <div className="glass rounded-2xl p-8 shadow-2xl">
                     {/* Header */}
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-                        <p className="text-white/70">Sign in to your account</p>
+                        <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
+                        <p className="text-white/70">Join us and get started</p>
                     </div>
 
                     {/* Error Messages */}
-                    {validation.length > 0 && (
+                    {validation.errors && validation.errors.length > 0 && (
                         <div className="mb-4 p-4 glass rounded-lg border border-red-400/50 bg-red-500/10">
                             <div className="flex items-start space-x-3">
                                 <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                                 <div className="space-y-1">
-                                    {validation.map((error, index) => (
+                                    {validation.errors.map((error, index) => (
                                         <p key={index} className="text-sm text-red-300">
-                                            {error.msg}
+                                            {error.path}: {error.msg}
                                         </p>
                                     ))}
                                 </div>
@@ -64,7 +67,23 @@ export default function Login() {
                     )}
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={register} className="space-y-4">
+                        {/* Full Name Input */}
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-white/80">Full Name</label>
+                            <div className="relative">
+                                <User className="absolute left-3 top-3 w-5 h-5 text-white/50" />
+                                <input
+                                    type="text"
+                                    placeholder="Enter your full name"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="input-glass pl-10"
+                                    required
+                                />
+                            </div>
+                        </div>
+
                         {/* Email Input */}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-white/80">Email Address</label>
@@ -88,7 +107,7 @@ export default function Login() {
                                 <Lock className="absolute left-3 top-3 w-5 h-5 text-white/50" />
                                 <input
                                     type={showPassword ? 'text' : 'password'}
-                                    placeholder="Enter your password"
+                                    placeholder="Create a strong password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     className="input-glass pl-10 pr-10"
@@ -108,24 +127,13 @@ export default function Login() {
                             </div>
                         </div>
 
-                        {/* Remember & Forgot Password */}
-                        <div className="flex items-center justify-between text-sm">
-                            <label className="flex items-center cursor-pointer">
-                                <input type="checkbox" className="w-4 h-4 rounded" />
-                                <span className="ml-2 text-white/70">Remember me</span>
-                            </label>
-                            <Link to="#" className="text-white/70 hover:text-white transition-smooth">
-                                Forgot password?
-                            </Link>
-                        </div>
-
                         {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}
                             className="btn-glass w-full bg-white/20 hover:bg-white/30 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg mt-6 transition-smooth"
                         >
-                            {loading ? 'Signing In...' : 'Sign In'}
+                            {loading ? 'Creating Account...' : 'Create Account'}
                         </button>
                     </form>
 
@@ -135,29 +143,18 @@ export default function Login() {
                             <div className="w-full border-t border-white/20"></div>
                         </div>
                         <div className="relative flex justify-center text-sm">
-                            <span className="px-2 text-white/50 bg-transparent">Or continue with</span>
+                            <span className="px-2 text-white/50 bg-transparent">Already have an account?</span>
                         </div>
                     </div>
 
-                    {/* Social Buttons */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <button type="button" className="glass py-2 rounded-lg text-white/80 hover:bg-white/20 transition-smooth text-sm font-medium">
-                            Google
-                        </button>
-                        <button type="button" className="glass py-2 rounded-lg text-white/80 hover:bg-white/20 transition-smooth text-sm font-medium">
-                            GitHub
-                        </button>
-                    </div>
-
-                    {/* Footer */}
-                    <p className="text-center text-white/70 text-sm mt-6">
-                        Don't have an account?{' '}
-                        <Link to="/register" className="text-white font-semibold hover:text-white/90 transition-smooth">
-                            Sign up
+                    {/* Sign In Link */}
+                    <p className="text-center text-white/70 text-sm">
+                        <Link to="/login" className="text-white font-semibold hover:text-white/90 transition-smooth">
+                            Sign in here
                         </Link>
                     </p>
                 </div>
             </div>
         </div>
-    );
+    )
 }

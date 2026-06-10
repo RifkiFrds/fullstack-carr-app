@@ -2,19 +2,19 @@
 import React, { useContext } from 'react';
 
 //import context
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../contexts/AuthContext';
 
 //import react router dom
 import { Routes, Route, Navigate } from "react-router-dom";
 
 //import view home
-import Home from "../views/home/index.jsx";
+import Home from "../pages/public/Home.jsx";
 
 //import view register
-import Register from "../views/auth/register.jsx";
+import Register from "../pages/public/Register.jsx";
 
 //import view login
-import Login from "../views/auth/login.jsx";
+import Login from "../pages/public/Login.jsx";
 
 export default function AppRoutes() {
 

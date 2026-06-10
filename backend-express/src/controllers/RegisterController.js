@@ -8,7 +8,7 @@ const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 // import prisma
-const prisma = require('../prisma/client');
+const prisma = require('../../prisma/client');
 
 // function register
 const register = async (req, res) => {
