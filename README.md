@@ -70,8 +70,8 @@ This project consists of two core applications:
    PORT=5000
    JWT_SECRET="your-super-secret-jwt-key"
    CLIENT_URL="http://localhost:5173"
-   DATABASE_URL="postgresql://postgres.aejsaipvsaymnbqmvaow:PRqh5qeAfQchAKwe@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true"
-   DIRECT_URL="postgresql://postgres.aejsaipvsaymnbqmvaow:PRqh5qeAfQchAKwe@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require"
+   DATABASE_URL="postgresql://postgres.[your password]:[EMAIL_ADDRESS]:6543/postgres?sslmode=require&pgbouncer=true"
+   DIRECT_URL="postgresql://postgres.[your password]:[EMAIL_ADDRESS]:5432/postgres?sslmode=require"
    ```
 
 4. Initialize database, migrate models and seed default data:
