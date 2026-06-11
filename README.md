@@ -1,334 +1,144 @@
-# Universal Listing Platform — Backend API
+# CarKi & Listing Webki — Full-Stack Vehicle Listings Platform
 
-A RESTful API for managing categories and listings, built with Express.js, Prisma ORM, and PostgreSQL (Supabase). Features JWT authentication, search, filtering, sorting, and pagination.
-
----
-
-## 🚀 Tech Stack
-
-| Technology | Purpose |
-|---|---|
-| **Node.js** | JavaScript runtime |
-| **Express.js** | Web framework |
-| **Prisma ORM** | Database toolkit & migrations |
-| **PostgreSQL** | Relational database |
-| **Supabase** | Cloud-hosted PostgreSQL |
-| **JWT** | Authentication tokens |
-| **bcryptjs** | Password hashing |
-| **express-validator** | Request validation |
+A modern, minimalist, full-stack vehicle listing platform built with a React frontend and an Express.js REST API backend. The project features a public marketplace interface (**CarKi**) and an administrative command console (**Listing Webki**) supporting dynamic metadata schemas across all 10 platform categories.
 
 ---
 
-## 📁 Project Structure
+## 🏗️ Repository Architecture
 
-```
-backend-express/
-├── prisma/
-│   ├── schema.prisma          # Database models & relations
-│   ├── client.js              # Prisma client singleton
-│   ├── seed.js                # Database seeder
-│   └── migrations/            # Migration history
-├── src/
-│   ├── app.js                 # Express app setup
-│   ├── server.js              # Server entry point
-│   ├── controllers/
-│   │   ├── auth.controller.js
-│   │   ├── category.controller.js
-│   │   └── listing.controller.js
-│   ├── services/
-│   │   ├── auth.service.js
-│   │   ├── category.service.js
-│   │   └── listing.service.js
-│   ├── routes/
-│   │   ├── auth.routes.js
-│   │   ├── category.routes.js
-│   │   └── listing.routes.js
-│   ├── middlewares/
-│   │   └── auth.middleware.js
-│   └── pages/
-│       └── docs.js            # API documentation landing page
-├── .env                       # Environment variables
-├── .gitignore
-├── package.json
-└── README.md
-```
+This project consists of two core applications:
+- **`backend-express/`**: Node.js & Express REST API powered by Prisma ORM and PostgreSQL (Supabase).
+- **`frontend-react/`**: Modern React & Vite application using Tailwind CSS, Axios, and React Router DOM.
 
 ---
 
-## ⚙️ Prerequisites
+## 🚀 Technology Stack
 
+### Backend (`backend-express`)
+- **Runtime & Framework**: Node.js & Express.js
+- **Database Tooling**: Prisma ORM with PostgreSQL (Supabase)
+- **Security & Auth**: JWT (JSON Web Tokens) & bcryptjs
+- **Validation**: express-validator
+
+### Frontend (`frontend-react`)
+- **Framework & Tooling**: React, Vite
+- **Routing**: React Router DOM (Layout nesting, private route guards)
+- **Styling**: Tailwind CSS (Minimalist light theme focus)
+- **HTTP Client**: Axios (interceptor config for tokens auto-injection)
+- **Session Management**: React Context API & js-cookie
+
+---
+
+## 📋 Features
+
+### 🌐 Public Portal (CarKi)
+- **Car Marketplace**: Showcase vehicle listings dynamically from the database.
+- **Search & Brand Filtering**: Filter listings by brand names (Toyota, Honda, BMW, etc.) and keywords.
+- **Dynamic Spec View**: Display car attributes (year, mileage, transmission, location, pricing).
+
+### 🔒 Admin Dashboard (Listing Webki)
+- **KPI Metrics**: Overall platform counters showing total listings, categories count, and recent list logs.
+- **Dynamic CRUD Engine**: Perform Create, Read, Update, and Delete operations for listings.
+- **Dynamic Metadata Forms**: The form automatically resolves fields depending on chosen categories (Handphone, Kendaraan, Laptop, Buku, Film, Makanan, Wisata, Sewa, Lowongan Kerja, Acara) and compiles JSON metadata before submission.
+- **Categories Viewer**: Read-only listing of database category models.
+
+---
+
+## ⚙️ Installation & Setup
+
+### Prerequisites
 - [Node.js](https://nodejs.org/) v18+
 - [npm](https://www.npmjs.com/) v9+
-- A [Supabase](https://supabase.com/) project (or any PostgreSQL instance)
+- A [Supabase](https://supabase.com/) project (or PostgreSQL instance)
 
 ---
 
-## 🛠️ Installation
+### Backend Setup (`backend-express`)
 
-### 1. Clone the repository
+1. Navigate to the backend directory:
+   ```bash
+   cd backend-express
+   ```
 
-```bash
-git clone https://github.com/your-username/fullstack-carr-app.git
-cd fullstack-carr-app/backend-express
-```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-### 2. Install dependencies
+3. Create a `.env` file inside `backend-express/` and fill:
+   ```env
+   PORT=5000
+   JWT_SECRET="your-super-secret-jwt-key"
+   CLIENT_URL="http://localhost:5173"
+   DATABASE_URL="postgresql://postgres.aejsaipvsaymnbqmvaow:PRqh5qeAfQchAKwe@aws-1-ap-northeast-1.pooler.supabase.com:6543/postgres?sslmode=require&pgbouncer=true"
+   DIRECT_URL="postgresql://postgres.aejsaipvsaymnbqmvaow:PRqh5qeAfQchAKwe@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres?sslmode=require"
+   ```
 
-```bash
-npm install
-```
+4. Initialize database, migrate models and seed default data:
+   ```bash
+   npx prisma generate
+   npx prisma migrate dev --name init
+   npx prisma db seed
+   ```
+   *Note: Seeding creates the default administrator credential (`admin@platform.com` / `admin123`).*
 
-### 3. Configure environment variables
+5. Run the dev server:
+   ```bash
+   npm start
+   ```
+   The backend API will run on `http://localhost:5000`.
 
-Create a `.env` file in the `backend-express/` root:
+---
 
-```env
-# Supabase PostgreSQL (pooled connection)
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:6543/postgres?sslmode=require&pgbouncer=true"
+### Frontend Setup (`frontend-react`)
 
-# Supabase PostgreSQL (direct connection — used for migrations)
-DIRECT_URL="postgresql://USER:PASSWORD@HOST:5432/postgres?sslmode=require"
+1. Navigate to the frontend directory:
+   ```bash
+   cd ../frontend-react
+   ```
 
-# JWT Secret
-JWT_SECRET="your-super-secret-key"
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-# Server Port
-PORT=3000
-```
+3. Create a `.env` file inside `frontend-react/` and fill:
+   ```env
+   VITE_API_URL=https://listing-webki-production.up.railway.app/api
+   ```
+   *(For local backend testing, update to `http://localhost:5000/api`)*
 
-> **Note:** Replace `USER`, `PASSWORD`, and `HOST` with your actual Supabase credentials found in **Project Settings → Database → Connection String**.
-
-### 4. Generate Prisma client
-
-```bash
-npx prisma generate
-```
-
-### 5. Run database migrations
-
-```bash
-npx prisma migrate dev --name init
-```
-
-### 6. Seed the database
-
-```bash
-npx prisma db seed
-```
-
-This creates:
-- A default admin user (`admin@platform.com`)
-- Predefined categories
-
-### 7. Start the development server
-
-```bash
-npm start
-```
-
-The API will be available at `http://localhost:3000`.
+4. Run the local development server:
+   ```bash
+   npm run dev
+   ```
+   The application will run on `http://localhost:5173`.
 
 ---
 
 ## 📖 API Endpoints
 
-### Root
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/` | API documentation page |
-
 ### Authentication
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/auth/login` | Public | Login and receive JWT |
-| `GET` | `/api/auth/me` | 🔒 JWT | Get current user info |
+- `POST /api/auth/login` - Login and get JWT token (Public)
+- `GET /api/auth/me` - Get logged-in user profile (Protected)
 
 ### Categories
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/categories` | Public | List all categories |
-| `GET` | `/api/categories/:id` | Public | Get category by ID |
-| `POST` | `/api/categories` | 🔒 JWT | Create a category |
-| `PUT` | `/api/categories/:id` | 🔒 JWT | Update a category |
-| `DELETE` | `/api/categories/:id` | 🔒 JWT | Delete a category |
+- `GET /api/categories` - List all categories (Public)
+- `GET /api/categories/:id` - Fetch category detail (Public)
 
 ### Listings
-
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/listings` | Public | List listings (search, filter, paginate) |
-| `GET` | `/api/listings/:id` | Public | Get listing by ID |
-| `POST` | `/api/listings` | 🔒 JWT | Create a listing |
-| `PUT` | `/api/listings/:id` | 🔒 JWT | Update a listing |
-| `DELETE` | `/api/listings/:id` | 🔒 JWT | Delete a listing |
+- `GET /api/listings` - List all listings with search, category filtering, and sorting (Public)
+- `GET /api/listings/:id` - Get listing details (Public)
+- `POST /api/listings` - Create new listing (Protected)
+- `PUT /api/listings/:id` - Update listing info (Protected)
+- `DELETE /api/listings/:id` - Delete listing (Protected)
 
 ---
 
-## 🔍 Search & Filter
+## 🤝 Project Credits & Author
 
-The `GET /api/listings` endpoint supports query parameters:
+Developed by **Muhamad Rifki Firdaus** — Frontend Developer & System Creator.
+Student at **Universitas Muhammadiyah Tangerang**.
 
-| Parameter | Type | Description | Example |
-|---|---|---|---|
-| `search` | `string` | Search in title and description | `?search=toyota` |
-| `category` | `string` | Filter by category slug | `?category=kendaraan` |
-| `sort` | `string` | Sort by `newest` or `oldest` | `?sort=newest` |
-| `page` | `number` | Page number (default: 1) | `?page=2` |
-| `limit` | `number` | Items per page (default: 10, max: 100) | `?limit=5` |
-
-**Combined example:**
-
-```
-GET /api/listings?search=honda&category=kendaraan&sort=newest&page=1&limit=5
-```
-
-**Response includes pagination metadata:**
-
-```json
-{
-  "success": true,
-  "data": [...],
-  "pagination": {
-    "total": 25,
-    "page": 1,
-    "limit": 5,
-    "totalPages": 5,
-    "hasNextPage": true,
-    "hasPrevPage": false
-  }
-}
-```
-
----
-
-## 🔐 Authentication
-
-Protected routes require a JWT token in the `Authorization` header:
-
-```
-Authorization: Bearer <your_jwt_token>
-```
-
-### Login Example
-
-```bash
-curl -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email": "admin@platform.com", "password": "password123"}'
-```
-
-### Using the Token
-
-```bash
-curl -X POST http://localhost:3000/api/listings \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <token>" \
-  -d '{"title": "My Listing", "description": "Details here", "categoryId": 1}'
-```
-
----
-
-## 🗄️ Database Models
-
-```
-User
-├── id          (Int, PK, Auto Increment)
-├── username    (String, Unique)
-├── email       (String, Unique)
-├── password    (String, Hashed)
-├── createdAt   (DateTime)
-├── updatedAt   (DateTime)
-└── listings    → Listing[]
-
-Category
-├── id          (Int, PK, Auto Increment)
-├── name        (String)
-├── slug        (String, Unique)
-├── description (String, Optional)
-├── createdAt   (DateTime)
-├── updatedAt   (DateTime)
-└── listings    → Listing[]
-
-Listing
-├── id          (Int, PK, Auto Increment)
-├── title       (String)
-├── description (String)
-├── imageUrl    (String, Optional)
-├── metadata    (JSON)
-├── categoryId  → Category
-├── createdBy   → User
-├── createdAt   (DateTime)
-└── updatedAt   (DateTime)
-```
-
----
-
-## 🧪 Useful Commands
-
-```bash
-# Start the server
-npm start
-
-# Run Prisma Studio (visual database browser)
-npx prisma studio
-
-# Create a new migration
-npx prisma migrate dev --name <migration_name>
-
-# Reset the database
-npx prisma migrate reset
-
-# Seed the database
-npx prisma db seed
-
-# Generate Prisma client after schema changes
-npx prisma generate
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. **Fork** the repository
-2. **Create** a feature branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. **Commit** your changes:
-   ```bash
-   git commit -m "feat: add your feature description"
-   ```
-4. **Push** to your branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. **Open a Pull Request** against the `main` branch
-
-### Commit Convention
-
-This project follows [Conventional Commits](https://www.conventionalcommits.org/):
-
-| Prefix | Purpose |
-|---|---|
-| `feat:` | New feature |
-| `fix:` | Bug fix |
-| `docs:` | Documentation changes |
-| `refactor:` | Code restructuring |
-| `chore:` | Maintenance tasks |
-
----
-
-## 📄 License
-
-This project is licensed under the ISC License.
-
----
-
-## 📬 Contact
-
-For questions or issues, please open a [GitHub Issue](https://github.com/your-username/fullstack-carr-app/issues).
+- **GitHub**: [@RifkiFrds](https://github.com/RifkiFrds)
+- **LinkedIn**: [muhamad-rifki-firdaus](https://www.linkedin.com/in/muhamad-rifki-firdaus)

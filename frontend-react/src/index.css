@@ -2,29 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Glass Morphism Effect */
-.glass {
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Minimalist Design Utilities */
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
 }
 
-/* Gradient Background */
-.gradient-bg {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-/* Smooth Transitions */
 @layer components {
   .transition-smooth {
-    @apply transition-all duration-300 ease-in-out;
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .card-minimal {
+    @apply bg-white border border-slate-100 rounded-xl shadow-sm hover:shadow-md hover:border-slate-200/80 transition-smooth overflow-hidden;
+  }
+
+  .input-minimal {
+    @apply bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none transition-smooth focus:border-slate-400 focus:ring-1 focus:ring-slate-400;
+  }
+
+  .btn-primary {
+    @apply bg-slate-900 text-white hover:bg-slate-800 px-5 py-2.5 rounded-lg text-sm font-semibold transition-smooth flex items-center justify-center space-x-2 shadow-sm active:scale-[0.98] disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 px-5 py-2.5 rounded-lg text-sm font-semibold transition-smooth flex items-center justify-center space-x-2 active:scale-[0.98] disabled:opacity-50;
   }
   
-  .btn-glass {
-    @apply glass px-6 py-2 rounded-lg font-medium transition-smooth hover:bg-white/20 active:scale-95;
-  }
-  
-  .input-glass {
-    @apply glass w-full px-4 py-2 rounded-lg text-white placeholder-white/50 outline-none transition-smooth focus:bg-white/20;
+  .btn-danger {
+    @apply bg-rose-50 text-rose-600 hover:bg-rose-100 hover:text-rose-700 px-5 py-2.5 rounded-lg text-sm font-semibold transition-smooth flex items-center justify-center space-x-2 active:scale-[0.98] disabled:opacity-50;
   }
 }
