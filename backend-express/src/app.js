@@ -16,21 +16,8 @@ const listingRoutes = require('./routes/listing.routes')
 //init app
 const app = express()
 
-//use cors with specific origins
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://listing-carki.vercel.app',
-  'http://listing-carki.vercel.app'
-];
-
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: true,
   credentials: true
 }));
 
